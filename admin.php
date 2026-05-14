@@ -72,7 +72,81 @@ switch ($action) {
         header("Location: admin.php?action=reviews");
         exit;
 
-    // Здесь будут роуты для products, categories, orders
+    case 'products':
+        require_once 'models/Product.php';
+        require_once 'models/Category.php';
+        $productModel = new Product($pdo);
+        $categoryModel = new Category($pdo);
+        $allProducts = $productModel->getAll();
+        $allCategories = $categoryModel->getAll();
+        include 'views/admin/products.php';
+        break;
+
+    case 'product_add':
+        require_once 'models/Product.php';
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $name = trim($_POST['name']);
+            $categoryId = (int)$_POST['category_id'];
+            $price = (float)$_POST['price'];
+            $description = trim($_POST['description']);
+            $imageName = 'default.png';
+
+            if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+                $tmpName = $_FILES['image']['tmp_name'];
+                $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+                $imageName = uniqid() . '.' . $ext;
+                move_uploaded_file($tmpName, 'public/uploads/' . $imageName);
+            }
+
+            $productModel = new Product($pdo);
+            $productModel->add($categoryId, $name, $description, $price, $imageName);
+        }
+        header("Location: admin.php?action=products");
+        exit;
+
+    case 'product_delete':
+        require_once 'models/Product.php';
+        $id = (int)$_GET['id'];
+        $productModel = new Product($pdo);
+        // В идеале тут нужно удалять и картинку, но для простоты оставим так
+        $productModel->delete($id);
+        header("Location: admin.php?action=products");
+        exit;
+
+    case 'orders':
+        require_once 'models/Order.php';
+        $orderModel = new Order($pdo);
+        $allOrders = $orderModel->getAllOrders();
+        include 'views/admin/orders.php';
+        break;
+
+    case 'categories':
+        require_once 'models/Category.php';
+        $categoryModel = new Category($pdo);
+        $allCategories = $categoryModel->getAll();
+        include 'views/admin/categories.php';
+        break;
+
+    case 'category_add':
+        require_once 'models/Category.php';
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $name = trim($_POST['name']);
+            if ($name) {
+                $categoryModel = new Category($pdo);
+                $categoryModel->add($name);
+            }
+        }
+        header("Location: admin.php?action=categories");
+        exit;
+
+    case 'category_delete':
+        require_once 'models/Category.php';
+        $id = (int)$_GET['id'];
+        $categoryModel = new Category($pdo);
+        $categoryModel->delete($id);
+        header("Location: admin.php?action=categories");
+        exit;
+
     default:
         echo "Страница не найдена";
 }
