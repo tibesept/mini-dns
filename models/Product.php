@@ -45,4 +45,24 @@ class Product {
         $stmt->execute([$id]);
         return $stmt->fetch();
     }
+
+    public function add($categoryId, $name, $description, $price, $image) {
+        $stmt = $this->pdo->prepare("INSERT INTO products (category_id, name, description, price, image) VALUES (?, ?, ?, ?, ?)");
+        return $stmt->execute([$categoryId, $name, $description, $price, $image]);
+    }
+
+    public function update($id, $categoryId, $name, $description, $price, $image = null) {
+        if ($image) {
+            $stmt = $this->pdo->prepare("UPDATE products SET category_id = ?, name = ?, description = ?, price = ?, image = ? WHERE id = ?");
+            return $stmt->execute([$categoryId, $name, $description, $price, $image, $id]);
+        } else {
+            $stmt = $this->pdo->prepare("UPDATE products SET category_id = ?, name = ?, description = ?, price = ? WHERE id = ?");
+            return $stmt->execute([$categoryId, $name, $description, $price, $id]);
+        }
+    }
+
+    public function delete($id) {
+        $stmt = $this->pdo->prepare("DELETE FROM products WHERE id = ?");
+        return $stmt->execute([$id]);
+    }
 }

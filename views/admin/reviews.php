@@ -23,12 +23,12 @@
         <div class="col-md-3">
             <div class="list-group rounded-4 shadow-sm border-0">
                 <a href="admin.php?action=dashboard" class="list-group-item list-group-item-action border-0">Главная</a>
-                <a href="#" class="list-group-item list-group-item-action border-0">Товары</a>
-                <a href="#" class="list-group-item list-group-item-action border-0">Категории</a>
+                <a href="admin.php?action=products" class="list-group-item list-group-item-action border-0">Товары</a>
+                <a href="admin.php?action=categories" class="list-group-item list-group-item-action border-0">Категории</a>
                 <a href="admin.php?action=reviews" class="list-group-item list-group-item-action active border-0 d-flex justify-content-between align-items-center">
                     Отзывы
                 </a>
-                <a href="#" class="list-group-item list-group-item-action border-0 d-flex justify-content-between align-items-center">
+                <a href="admin.php?action=orders" class="list-group-item list-group-item-action border-0 d-flex justify-content-between align-items-center">
                     Заказы
                 </a>
             </div>

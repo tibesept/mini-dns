@@ -30,4 +30,9 @@ class Order {
             return false;
         }
     }
+
+    public function getAllOrders() {
+        $stmt = $this->pdo->query("SELECT * FROM orders ORDER BY created_at DESC");
+        return $stmt->fetchAll();
+    }
 }
